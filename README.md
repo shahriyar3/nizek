@@ -14,7 +14,7 @@ A Laravel-based API for analyzing stock prices with Excel file upload functional
 
 1. Clone the repository:
 ```bash
-git clone [repository-url]
+git clone https://github.com/shahriyar3/nizek.git
 cd nizek
 ```
 
