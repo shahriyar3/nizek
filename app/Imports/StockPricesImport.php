@@ -51,6 +51,6 @@ readonly class StockPricesImport implements ToCollection, WithHeadingRow, WithCh
 
     public function headingRow(): int
     {
-        return 8;
+        return 9;
     }
 }
