@@ -1,0 +1,246 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Nizek Platform API",
+        "description": "API for Nizek platform",
+        "contact": {
+            "name": "Shahriyar Bayat",
+            "email": "shahriyar.bayat@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/stock-prices/custom": {
+            "get": {
+                "tags": [
+                    "Stock Prices"
+                ],
+                "summary": "Get stock price data for custom period",
+                "operationId": "7316a24f40047575a2ca66dd9f4f2ad9",
+                "parameters": [
+                    {
+                        "name": "company_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "start_date": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2024-01-01"
+                                                },
+                                                "end_date": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2024-04-30"
+                                                },
+                                                "start_price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 145.6
+                                                },
+                                                "end_price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 161.84
+                                                },
+                                                "percentage_change": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 11.15
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/stock-prices/periods": {
+            "get": {
+                "tags": [
+                    "Stock Prices"
+                ],
+                "summary": "Get stock price data for predefined periods",
+                "operationId": "a41c4be4a7f0125c7d5451cfa9fbfeb3",
+                "parameters": [
+                    {
+                        "name": "company_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "period": {
+                                                        "type": "string",
+                                                        "example": "1D"
+                                                    },
+                                                    "start_date": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "example": "2024-04-29"
+                                                    },
+                                                    "end_date": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "example": "2024-04-30"
+                                                    },
+                                                    "start_price": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 163.76
+                                                    },
+                                                    "end_price": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 161.84
+                                                    },
+                                                    "percentage_change": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": -1.17
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/stock-prices/upload": {
+            "post": {
+                "tags": [
+                    "Stock Prices"
+                ],
+                "summary": "Upload Excel file with stock prices",
+                "operationId": "ce286620698e94879094bec128c22ff1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "file": {
+                                        "description": "Excel file containing stock prices",
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "company_id": {
+                                        "description": "Company identifier",
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "File uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "File uploaded successfully and is being processed."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Stock Prices",
+            "description": "Stock Prices"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ]
+}

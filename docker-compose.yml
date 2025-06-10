@@ -1,0 +1,94 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: nizek-app
+    restart: unless-stopped
+    volumes:
+      - ./:/app
+    networks:
+      - nizek-network
+    depends_on:
+      - db
+      - redis
+
+  supervisor:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: nizek-supervisor
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - ./supervisor:/etc/supervisor/conf.d
+    command: /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+    networks:
+      - nizek-network
+    depends_on:
+      - app
+
+  nginx:
+    image: nginx:alpine
+    container_name: nizek-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/app
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - nizek-network
+    depends_on:
+      - app
+
+  db:
+    image: mariadb:11.3
+    container_name: nizek-db
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: nizek
+      MARIADB_ROOT_PASSWORD: nizek
+      MARIADB_PASSWORD: nizek
+      MARIADB_USER: nizek
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mariadb
+    volumes:
+      - ./docker/mariadb:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - nizek-network
+
+  redis:
+    image: redis:alpine
+    container_name: nizek-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - nizek-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: nizek-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: nizek
+      PMA_PASSWORD: nizek
+    ports:
+      - "8080:80"
+    networks:
+      - nizek-network
+    depends_on:
+      - db
+
+networks:
+  nizek-network:
+    driver: bridge
+
+volumes:
+  dbdata:
