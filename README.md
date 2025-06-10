@@ -39,7 +39,7 @@ REDIS_PORT=6379
 
 4. Build and start Docker containers:
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
 
 5. Install Composer dependencies:
@@ -156,14 +156,3 @@ A Postman collection is provided in `postman_collection.json` for testing the AP
      - URL: `{{base_url}}/api/stock-prices/custom`
      - Query: company_id, start_date, end_date
 
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-This project is licensed under the MIT License.
