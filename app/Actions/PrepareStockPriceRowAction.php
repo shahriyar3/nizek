@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class PrepareStockPriceRowAction
 {
@@ -15,7 +16,11 @@ class PrepareStockPriceRowAction
         }
 
         try {
-            $date = Carbon::createFromFormat('m/d/y', $row['date'])->toDateString();
+            if (is_numeric($row['date'])) {
+                $date = ExcelDate::excelToDateTimeObject($row['date'])->format('Y-m-d');
+            } else {
+                $date = Carbon::createFromFormat('m/d/y', $row['date'])->toDateString();
+            }
         } catch (\Exception $e) {
             Log::error('Invalid date format in Excel row', ['row' => $row, 'error' => $e->getMessage()]);
             return null;
