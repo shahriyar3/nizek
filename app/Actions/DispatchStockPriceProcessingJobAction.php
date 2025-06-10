@@ -14,11 +14,11 @@ readonly class DispatchStockPriceProcessingJobAction
             return $next($data);
         }
 
-//        ProcessExcelFileJob::dispatch(
-//            $data['file_path'],
-//            $data['company_id']
-//        );
-        Excel::import(new StockPricesImport($data['company_id']), 'storage/app/public/' . $data['file_path']);
+        ProcessExcelFileJob::dispatch(
+            $data['file_path'],
+            $data['company_id']
+        );
+//        Excel::import(new StockPricesImport($data['company_id']), 'storage/app/public/' . $data['file_path']);
 
         $data['job_dispatched'] = true;
 

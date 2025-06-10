@@ -13,7 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Actions\PrepareStockPriceRowAction;
 use App\Actions\BatchInsertStockPricesAction;
 
-readonly class StockPricesImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts
+readonly class StockPricesImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue
 {
     public function __construct(private int $companyId)
     {
@@ -21,7 +21,6 @@ readonly class StockPricesImport implements ToCollection, WithHeadingRow, WithCh
 
     public function collection(Collection $collection): void
     {
-        Log::info('First row from excel', ['row' => $collection->first()]);
         DB::transaction(function () use ($collection) {
 
             $batchInsertAction = new BatchInsertStockPricesAction();
@@ -52,6 +51,6 @@ readonly class StockPricesImport implements ToCollection, WithHeadingRow, WithCh
 
     public function headingRow(): int
     {
-        return 9;
+        return 8;
     }
 }
